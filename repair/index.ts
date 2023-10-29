@@ -27,7 +27,7 @@ export default async function run(
   req: HttpRequest
 ): Promise<Response> {
   // Initialize response.
-  const res: Response = {
+  let res: Response = {
     status: 200,
     body: {
       results: [],
@@ -56,7 +56,7 @@ export default async function run(
   });
 
   // Send the request to retrieve work items.
-  const response = await fetch(url, { body, headers });
+  const response = await fetch(url, { body, headers, method: 'POST' });
 
   if (!response.ok) {
     // The request failed, return the error.
@@ -71,45 +71,44 @@ export default async function run(
   // Parse the response as JSON.
   const data = await response.json();
 
-  // Get the work item details by ID.
-  data.workItems.forEach(async (item) => {
-    const workItem = await getWorkItemById(item.id);
-    res.body.results.push(workItem);
-  });
+  // Get the work items.
+  for (const item of data.workItems) {
+    const itemUrl = item.url;
+    const itemDetail = await getWorkItemById(itemUrl);
+    res.body.results.push(itemDetail);
+  }
 
   return res;
 }
 
-async function getWorkItemById(id: string) {
-  // Get the query parameters.
-  const orgName = config.orgName;
-  const projectName = config.projectName;
+async function getWorkItemById(url: string) {
+  try {
+    // Encode the access token for authentication.
+    const auth = Buffer.from(`:${config.accessToken}`).toString('base64');
 
-  // Define the URL to retrieve work items.
-  const url = `https://dev.azure.com/${orgName}/${projectName}/_apis/wit/workitems/${id}?api-version=7.1-preview.2`;
+    // Set the headers for the request.
+    const headers = {
+      Authorization: `Basic ${auth}`,
+      'Content-Type': 'application/json',
+    };
 
-  // Encode the access token for authentication.
-  const auth = Buffer.from(`:${config.accessToken}`).toString('base64');
+    // Send the request to retrieve work items.
+    const response = await fetch(url, { headers });
 
-  // Set the headers for the request.
-  const headers = {
-    Authorization: `Basic ${auth}`,
-    'Content-Type': 'application/json',
-  };
+    if (!response.ok) {
+      return {};
+    }
 
-  // Send the request to retrieve work items.
-  const response = await fetch(url, { headers });
+    // Parse the response as JSON.
+    const data = await response.json();
 
-  if (!response.ok) {
+    return {
+      id: data.id,
+      title: data.fields['System.Title'] ?? '',
+      url: data._links.html.href ?? '',
+    };
+  } catch (error) {
+    console.error(error);
     return {};
   }
-
-  // Parse the response as JSON.
-  const data = await response.json();
-
-  return {
-    id: data.id,
-    title: data.fields['System.Title'],
-    url: data._links.html.href,
-  };
 }
