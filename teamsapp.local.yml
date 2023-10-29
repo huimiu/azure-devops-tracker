@@ -8,7 +8,7 @@ provision:
   - uses: teamsApp/create
     with:
       # Teams app name
-      name: azdo-copilot${{APP_NAME_SUFFIX}}
+      name: azure-devops${{APP_NAME_SUFFIX}}
     # Write the information of created resources into environment file for
     # the specified environment variable(s).
     writeToEnvironmentFile:
@@ -77,3 +77,12 @@ deploy:
     name: install dependencies
     with:
       args: install --no-audit
+
+    # Generate runtime environment variables
+  - uses: file/createOrUpdateEnvironmentFile
+    with:
+      target: ./.localConfigs
+      envs:
+        DEVOPS_ORGANIZATION_NAME: ${{DEVOPS_ORGANIZATION_NAME}}
+        DEVOPS_PROJECT_NAME: ${{DEVOPS_PROJECT_NAME}}
+        SECRET_DEVOPS_ACCESS_TOKEN: ${{SECRET_DEVOPS_ACCESS_TOKEN}}

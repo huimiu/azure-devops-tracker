@@ -3,8 +3,9 @@
  * developer guide.
  */
 
-import { Context, HttpRequest } from "@azure/functions";
-import repairRecords from "../repairsData.json";
+import { Context, HttpRequest } from '@azure/functions';
+
+import config from '../config';
 
 // Define a Response interface.
 interface Response {
@@ -15,13 +16,16 @@ interface Response {
 }
 
 /**
- * This function handles the HTTP request and returns the repair information.
+ * This function handles the HTTP request and returns work items information.
  *
  * @param {Context} context - The Azure Functions context object.
  * @param {HttpRequest} req - The HTTP request.
- * @returns {Promise<Response>} - A promise that resolves with the HTTP response containing the repair information.
+ * @returns {Promise<Response>} - A promise that resolves with the HTTP response containing work items information.
  */
-export default async function run(context: Context, req: HttpRequest): Promise<Response> {
+export default async function run(
+  context: Context,
+  req: HttpRequest
+): Promise<Response> {
   // Initialize response.
   const res: Response = {
     status: 200,
@@ -30,23 +34,82 @@ export default async function run(context: Context, req: HttpRequest): Promise<R
     },
   };
 
-  // Get the assignedTo query parameter.
-  const assignedTo = req.query.assignedTo;
+  // Get the query parameters.
+  const orgName = config.orgName;
+  const projectName = config.projectName;
 
-  // If the assignedTo query parameter is not provided, return the response.
-  if (!assignedTo) {
-    return res;
-  }
+  // Define the URL to retrieve work items.
+  const url = `https://dev.azure.com/${orgName}/${projectName}/_apis/wit/wiql?api-version=7.1-preview.2`;
 
-  // Filter the repair information by the assignedTo query parameter.
-  const repairs = repairRecords.filter((item) => {
-    const fullName = item.assignedTo.toLowerCase();
-    const query = assignedTo.trim().toLowerCase();
-    const [firstName, lastName] = fullName.split(" ");
-    return fullName === query || firstName === query || lastName === query;
+  // Encode the access token for authentication.
+  const auth = Buffer.from(`:${config.accessToken}`).toString('base64');
+
+  // Set the headers for the request.
+  const headers = {
+    Authorization: `Basic ${auth}`,
+    'Content-Type': 'application/json',
+  };
+
+  // Set the body of the request.
+  const body = JSON.stringify({
+    query: `Select [System.Id], [System.Title], [System.State] From workitems Where [System.WorkItemType] = 'Task' AND [State] <> 'Closed' AND [State] <> 'Removed' AND [System.AssignedTo] = @Me order by [Microsoft.VSTS.Common.Priority] asc, [System.CreatedDate] desc`,
   });
 
-  // Return filtered repair records, or an empty array if no records were found.
-  res.body.results = repairs ?? [];
+  // Send the request to retrieve work items.
+  const response = await fetch(url, { body, headers });
+
+  if (!response.ok) {
+    // The request failed, return the error.
+    return {
+      status: response.status,
+      body: {
+        results: [],
+      },
+    };
+  }
+
+  // Parse the response as JSON.
+  const data = await response.json();
+
+  // Get the work item details by ID.
+  data.workItems.forEach(async (item) => {
+    const workItem = await getWorkItemById(item.id);
+    res.body.results.push(workItem);
+  });
+
   return res;
+}
+
+async function getWorkItemById(id: string) {
+  // Get the query parameters.
+  const orgName = config.orgName;
+  const projectName = config.projectName;
+
+  // Define the URL to retrieve work items.
+  const url = `https://dev.azure.com/${orgName}/${projectName}/_apis/wit/workitems/${id}?api-version=7.1-preview.2`;
+
+  // Encode the access token for authentication.
+  const auth = Buffer.from(`:${config.accessToken}`).toString('base64');
+
+  // Set the headers for the request.
+  const headers = {
+    Authorization: `Basic ${auth}`,
+    'Content-Type': 'application/json',
+  };
+
+  // Send the request to retrieve work items.
+  const response = await fetch(url, { headers });
+
+  if (!response.ok) {
+    return {};
+  }
+
+  // Parse the response as JSON.
+  const data = await response.json();
+
+  return {
+    id: data.id,
+    title: data.fields['System.Title'],
+    url: data._links.html.href,
+  };
 }

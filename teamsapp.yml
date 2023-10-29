@@ -11,7 +11,7 @@ provision:
   - uses: teamsApp/create
     with:
       # Teams app name
-      name: azdo-copilot${{APP_NAME_SUFFIX}}
+      name: azure-devops${{APP_NAME_SUFFIX}}
     # Write the information of created resources into environment file for
     # the specified environment variable(s).
     writeToEnvironmentFile:
@@ -144,4 +144,3 @@ publish:
     # the specified environment variable(s).
     writeToEnvironmentFile:
       publishedAppId: TEAMS_APP_PUBLISHED_APP_ID
-projectId: e53bd9a7-d588-4a2d-9a82-48b745ef98d4
