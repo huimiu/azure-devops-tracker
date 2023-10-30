@@ -26,19 +26,19 @@
   "composeExtensions": [
     {
       "composeExtensionType": "apiBased",
-      "apiSpecificationFile": "apiSpecificationFiles/repair.yml",
+      "apiSpecificationFile": "apiSpecificationFiles/task.yml",
       "commands": [
         {
-          "id": "repair",
+          "id": "task",
           "type": "query",
-          "title": "Search for repairs info",
+          "title": "Search for task info",
           "context": ["compose", "commandBox"],
-          "apiResponseRenderingTemplateFile": "responseTemplates/repair.json",
+          "apiResponseRenderingTemplateFile": "responseTemplates/task.json",
           "parameters": [
             {
               "name": "assignedTo",
               "title": "Assigned To",
-              "description": "Filter repairs by who they're assigned to",
+              "description": "Filter tasks by who they're assigned to",
               "inputType": "text"
             }
           ]

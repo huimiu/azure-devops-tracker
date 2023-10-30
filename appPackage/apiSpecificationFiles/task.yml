@@ -1,0 +1,46 @@
+openapi: 3.0.0
+info:
+  title: Azure Devops Task Service
+  description: This is the API specification for the Azure Devops Task Service
+  version: 1.0.0
+servers:
+  - url: ${{OPENAPI_SERVER_URL}}/api
+    description: The API url for the Azure Devops Task Service
+paths:
+  /task:
+    get:
+      operationId: task
+      summary: Get a list of tasks
+      description: Get a list of tasks that are mathing the given filter criteria
+      parameters:
+        - name: assignedTo
+          in: query
+          description: Filter tasks by who they're assigned to
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      description: The unique identifier of the task
+                    title:
+                      type: string
+                      description: The title of the task                    
+                    assignedTo:
+                      type: string
+                      description: The user who is responsible for the task
+                    url:
+                      type: string
+                      format: uri
+                      description: The html url of the task
+                    avatar:
+                      type: string
+                      description: The avatar of the user who is responsible for the task

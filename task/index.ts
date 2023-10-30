@@ -3,9 +3,9 @@
  * developer guide.
  */
 
-import { Context, HttpRequest } from '@azure/functions';
+import { Context, HttpRequest } from "@azure/functions";
 
-import config from '../config';
+import config from "../config";
 
 // Define a Response interface.
 interface Response {
@@ -105,7 +105,9 @@ async function getWorkItemById(url: string) {
     return {
       id: data.id,
       title: data.fields['System.Title'] ?? '',
+      assignedTo: data.fields['System.AssignedTo']?.displayName ?? '',
       url: data._links.html.href ?? '',
+      avatar: data.fields['System.AssignedTo']?.imageUrl ?? '',
     };
   } catch (error) {
     console.error(error);

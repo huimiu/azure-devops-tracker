@@ -20,56 +20,32 @@
                 "items": [
                   {
                     "type": "TextBlock",
+                    "text": "Id: ${if(id, id, 'N/A')}",
+                    "wrap": true
+                  },
+                  {
+                    "type": "TextBlock",
                     "text": "Title: ${if(title, title, 'N/A')}",
                     "wrap": true
                   },
                   {
                     "type": "TextBlock",
-                    "text": "Description: ${if(description, description, 'N/A')}",
+                    "text": "URL: ${if(assignedTo, assignedTo, 'N/A')}",
                     "wrap": true
-                  },
-                  {
-                    "type": "TextBlock",
-                    "text": "Assigned To: ${if(assignedTo, assignedTo, 'N/A')}",
-                    "wrap": true
-                  }
-                ]
-              },
-              {
-                "type": "Column",
-                "width": "auto",
-                "items": [
-                  {
-                    "type": "Image",
-                    "url": "${if(image, image, '')}",
-                    "size": "Medium"
                   }
                 ]
               }
             ]
-          },
-          {
-            "type": "FactSet",
-            "facts": [
-              {
-                "title": "Repair ID:",
-                "value": "${if(id, id, 'N/A')}"
-              },
-              {
-                "title": "Date:",
-                "value": "${if(date, date, 'N/A')}"
-              }
-            ]
-          }
+          }          
         ]
       }
     ]
   },
   "previewCardTemplate": {
     "title": "${if(title, title, 'N/A')}",
-    "subtitle": "${if(description, description, 'N/A')}",
+    "subtitle": "${if(assignedTo, assignedTo, 'N/A')}",
     "image": {
-      "url": "${if(image, image, '')}",
+      "url": "${if(avatar, avatar, '')}",
       "alt": "${if(title, title, 'N/A')}"
     }
   }
