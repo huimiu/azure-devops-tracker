@@ -3,9 +3,9 @@
  * developer guide.
  */
 
-import { Context, HttpRequest } from "@azure/functions";
+import { Context, HttpRequest } from '@azure/functions';
 
-import config from "../config";
+import config from '../config';
 
 // Define a Response interface.
 interface Response {
@@ -34,6 +34,10 @@ export default async function run(
     },
   };
 
+  const assignedTo = req.query.assignedTo;
+  const priority = req.query.priority;
+  const title = req.query.title;
+
   // Get the query parameters.
   const orgName = config.orgName;
   const projectName = config.projectName;
@@ -50,9 +54,26 @@ export default async function run(
     'Content-Type': 'application/json',
   };
 
+  // Construct query statement based on query parameters.
+  let conditions = '';
+  if (assignedTo) {
+    conditions +=
+      assignedTo.toLowerCase() === 'me'
+        ? ` AND [System.AssignedTo] = @Me`
+        : ` AND [System.AssignedTo] = '${assignedTo}'`;
+  }
+
+  if (priority) {
+    conditions += ` AND [Microsoft.VSTS.Common.Priority] = ${priority}`;
+  }
+
+  if (title) {
+    conditions += ` AND [System.Title] Contains '${title}'`;
+  }
+
   // Set the body of the request.
   const body = JSON.stringify({
-    query: `Select [System.Id], [System.Title], [System.State] From workitems Where [System.WorkItemType] = 'Task' AND [State] <> 'Closed' AND [State] <> 'Removed' AND [System.AssignedTo] = @Me order by [Microsoft.VSTS.Common.Priority] asc, [System.CreatedDate] desc`,
+    query: `Select [System.Id], [System.Title], [System.State] From workitems Where [System.WorkItemType] = 'Bug' AND [State] <> 'Closed' AND [State] <> 'Removed' ${conditions} order by [Microsoft.VSTS.Common.Priority] asc, [System.CreatedDate] desc`,
   });
 
   // Send the request to retrieve work items.
@@ -103,7 +124,7 @@ async function getWorkItemById(url: string) {
     const data = await response.json();
 
     return {
-      id: data.id,
+      id: data.id.toString() ?? '',
       title: data.fields['System.Title'] ?? '',
       assignedTo: data.fields['System.AssignedTo']?.displayName ?? '',
       url: data._links.html.href ?? '',

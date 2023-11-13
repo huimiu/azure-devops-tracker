@@ -15,30 +15,42 @@
     "outline": "outline.png"
   },
   "name": {
-    "short": "azure-devops${{APP_NAME_SUFFIX}}",
-    "full": "Full name for azure-devops"
+    "short": "azure-devops-bug-tracker${{APP_NAME_SUFFIX}}",
+    "full": "Full name for azure-devops-bug-tracker"
   },
   "description": {
-    "short": "Track and monitor car repair records for stress-free maintenance management.",
-    "full": "The ultimate solution for hassle-free car maintenance management makes tracking and monitoring your car repair records a breeze."
+    "short": "Query Azure Devops for bugs.",
+    "full": "Query Azure DevOps for bugs to efficiently track and manage software issues within the development lifecycle."
   },
   "accentColor": "#FFFFFF",
   "composeExtensions": [
     {
       "composeExtensionType": "apiBased",
-      "apiSpecificationFile": "apiSpecificationFiles/task.yml",
+      "apiSpecificationFile": "apiSpecificationFiles/bug.yml",
       "commands": [
         {
-          "id": "task",
+          "id": "bug",
           "type": "query",
-          "title": "Search for task info",
+          "title": "Search for bug info",
           "context": ["compose", "commandBox"],
-          "apiResponseRenderingTemplateFile": "responseTemplates/task.json",
+          "apiResponseRenderingTemplateFile": "responseTemplates/bug.json",
           "parameters": [
             {
               "name": "assignedTo",
               "title": "Assigned To",
-              "description": "Filter tasks by who they're assigned to",
+              "description": "Filter bugs by who they're assigned to",
+              "inputType": "text"
+            },
+            {
+              "name": "priority",
+              "title": "Priority",
+              "description": "Filter bugs by priority",
+              "inputType": "text"
+            },
+            {
+              "name": "title",
+              "title": "Title",
+              "description": "Filter bugs by title",
               "inputType": "text"
             }
           ]
