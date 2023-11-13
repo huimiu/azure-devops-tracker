@@ -15,8 +15,8 @@
     "outline": "outline.png"
   },
   "name": {
-    "short": "azure-devops-bug-tracker${{APP_NAME_SUFFIX}}",
-    "full": "Full name for azure-devops-bug-tracker"
+    "short": "bug-tracker-${{APP_NAME_SUFFIX}}",
+    "full": "Full name for bug-tracker"
   },
   "description": {
     "short": "Query Azure Devops for bugs.",
@@ -36,21 +36,9 @@
           "apiResponseRenderingTemplateFile": "responseTemplates/bug.json",
           "parameters": [
             {
-              "name": "assignedTo",
-              "title": "Assigned To",
-              "description": "Filter bugs by who they're assigned to",
-              "inputType": "text"
-            },
-            {
-              "name": "priority",
-              "title": "Priority",
-              "description": "Filter bugs by priority",
-              "inputType": "text"
-            },
-            {
-              "name": "title",
-              "title": "Title",
-              "description": "Filter bugs by title",
+              "name": "prompt",
+              "title": "Prompt",
+              "description": "User input prompt",
               "inputType": "text"
             }
           ]

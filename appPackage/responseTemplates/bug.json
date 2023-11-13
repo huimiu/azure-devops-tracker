@@ -20,7 +20,7 @@
                 "items": [
                   {
                     "type": "TextBlock",
-                    "text": "Id: ${if(id, id, 'N/A')}",
+                    "text": "ID: ${if(id, id, 'N/A')}",
                     "wrap": true
                   },
                   {
@@ -30,7 +30,12 @@
                   },
                   {
                     "type": "TextBlock",
-                    "text": "URL: ${if(assignedTo, assignedTo, 'N/A')}",
+                    "text": "AssignedTo: ${if(assignedTo, assignedTo, 'N/A')}",
+                    "wrap": true
+                  },
+                  {
+                    "type": "TextBlock",
+                    "text": "URL: ${if(url, url, 'N/A')}",
                     "wrap": true
                   }
                 ]
@@ -45,7 +50,7 @@
     "title": "${if(title, title, 'N/A')}",
     "subtitle": "${if(assignedTo, assignedTo, 'N/A')}",
     "image": {
-      "url": "${if(avatar, avatar, '')}",
+      "url": "https://logowik.com/content/uploads/images/azure-devops1866.jpg",
       "alt": "${if(title, title, 'N/A')}"
     }
   }

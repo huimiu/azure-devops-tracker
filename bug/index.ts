@@ -4,8 +4,16 @@
  */
 
 import { Context, HttpRequest } from '@azure/functions';
+import {
+  ApiKeyLocation,
+  ApiKeyProvider,
+  AxiosInstance,
+  createApiClient,
+} from '@microsoft/teamsfx';
 
 import config from '../config';
+import example from '../prompt/example.json';
+import sysPrompt from '../prompt/system';
 
 // Define a Response interface.
 interface Response {
@@ -13,6 +21,12 @@ interface Response {
   body: {
     results: any[];
   };
+}
+
+// Define an Example interface with a content string and a role string.
+interface Example {
+  content: string;
+  role: string;
 }
 
 /**
@@ -34,9 +48,15 @@ export default async function run(
     },
   };
 
-  const assignedTo = req.query.assignedTo;
-  const priority = req.query.priority;
-  const title = req.query.title;
+  // Extract the param from the request.
+  const resp = await callOAI(
+    constructRquest(req.query.prompt, sysPrompt, example)
+  );
+  const parsedResp = JSON.parse(resp.message.content);
+
+  const assignedTo = parsedResp.assignedTo;
+  const priority = parsedResp.priority;
+  const title = parsedResp.title;
 
   // Get the query parameters.
   const orgName = config.orgName;
@@ -100,6 +120,73 @@ export default async function run(
   }
 
   return res;
+}
+
+/**
+ * Constructs a request object for the OpenAI API.
+ * @param userInput The user's input.
+ * @param prompt The prompt to use.
+ * @param example The example to use.
+ * @returns
+ */
+function constructRquest(userInput: string, prompt: string, example: any[]) {
+  return {
+    messages: [
+      {
+        content: prompt,
+        role: 'system',
+      },
+      ...getExample(example),
+      {
+        content: userInput,
+        role: 'user',
+      },
+    ],
+  };
+}
+
+/**
+ * Converts the example data into a list of examples for the OpenAI API.
+ * @param exampleData The example data to convert.
+ * @returns A list of examples for the OpenAI API.
+ */
+function getExample(exampleData: any[]): Example[] {
+  const examples: Example[] = [];
+  exampleData.forEach((item) => {
+    examples.push({
+      content: item.request,
+      role: 'user',
+    });
+    examples.push({
+      content: JSON.stringify(item.response),
+      role: 'assistant',
+    });
+  });
+  return examples;
+}
+
+/**
+ * Calls the OpenAI API with the provided request object.
+ * @param request - The request object to be sent to the OpenAI API.
+ * @returns The response object from the OpenAI API.
+ */
+async function callOAI(request: any) {
+  const authProvider = new ApiKeyProvider(
+    'api-key',
+    config.oaiApiKey,
+    ApiKeyLocation.Header
+  );
+  const apiClient: AxiosInstance = createApiClient(
+    config.oaiEndpoint,
+    authProvider
+  );
+  const resp = await apiClient.post(config.chatCompletionUrl, request);
+  if (resp.status !== 200) {
+    throw new Error(`Failed to call OpenAI API. Status code: ${resp.status}`);
+  }
+
+  const response = resp.data.choices[0];
+  return response;
 }
 
 async function getWorkItemById(url: string) {

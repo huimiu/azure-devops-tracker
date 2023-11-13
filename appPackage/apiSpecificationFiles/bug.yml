@@ -1,27 +1,27 @@
 openapi: 3.0.0
 info:
-  title: Azure Devops Task Service
-  description: This is the API specification for the Azure Devops Task Service
+  title: Azure Devops Bug Service
+  description: This is the API specification for the Azure Devops Bug Service
   version: 1.0.0
 servers:
   - url: ${{OPENAPI_SERVER_URL}}/api
-    description: The API url for the Azure Devops Task Service
+    description: The API url for the Azure Devops Bug Service
 paths:
-  /task:
+  /bug:
     get:
-      operationId: task
-      summary: Get a list of tasks
-      description: Get a list of tasks that are mathing the given filter criteria
+      operationId: bug
+      summary: Get a list of bugs
+      description: Get a list of bugs that are mathing the given filter criteria
       parameters:
-        - name: assignedTo
+        - name: prompt
           in: query
-          description: Filter tasks by who they're assigned to
+          description: User input prompt
           schema:
             type: string
           required: true
       responses:
         '200':
-          description: A list of tasks
+          description: A list of bugs
           content:
             application/json:
               schema:
@@ -29,18 +29,18 @@ paths:
                 items:
                   properties:
                     id:
-                      type: integer
-                      description: The unique identifier of the task
+                      type: string
+                      description: The unique identifier of the bug
                     title:
                       type: string
-                      description: The title of the task                    
+                      description: The title of the bug
                     assignedTo:
                       type: string
-                      description: The user who is responsible for the task
+                      description: The user who is responsible for the bug
                     url:
                       type: string
                       format: uri
-                      description: The html url of the task
+                      description: The html url of the bug
                     avatar:
                       type: string
-                      description: The avatar of the user who is responsible for the task
+                      description: The avatar of the user who is responsible for the bug
