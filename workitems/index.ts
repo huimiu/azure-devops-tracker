@@ -54,6 +54,7 @@ export default async function run(
   );
   const parsedResp = JSON.parse(resp.message.content);
 
+  const workItemType = parsedResp.workItemType;
   const assignedTo = parsedResp.assignedTo;
   const priority = parsedResp.priority;
   const title = parsedResp.title;
@@ -93,7 +94,7 @@ export default async function run(
 
   // Set the body of the request.
   const body = JSON.stringify({
-    query: `Select [System.Id], [System.Title], [System.State] From workitems Where [System.WorkItemType] = 'Bug' AND [State] <> 'Closed' AND [State] <> 'Removed' ${conditions} order by [Microsoft.VSTS.Common.Priority] asc, [System.CreatedDate] desc`,
+    query: `Select [System.Id], [System.Title], [System.State] From workitems Where [System.WorkItemType] = '${workItemType}' AND [State] <> 'Closed' AND [State] <> 'Removed' ${conditions} order by [Microsoft.VSTS.Common.Priority] asc, [System.CreatedDate] desc`,
   });
 
   // Send the request to retrieve work items.

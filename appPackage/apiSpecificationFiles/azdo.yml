@@ -1,17 +1,17 @@
 openapi: 3.0.0
 info:
-  title: Azure Devops Bug Service
-  description: This is the API specification for the Azure Devops Bug Service
+  title: Azure Devops Work Items Service
+  description: This is the API specification for the Azure Devops Work Items Service
   version: 1.0.0
 servers:
   - url: ${{OPENAPI_SERVER_URL}}/api
-    description: The API url for the Azure Devops Bug Service
+    description: The API url for the Azure Devops Work Items Service
 paths:
-  /bug:
+  /workitems:
     get:
-      operationId: bug
-      summary: Get a list of bugs
-      description: Get a list of bugs that are mathing the given filter criteria
+      operationId: workitems
+      summary: Get a list of work items
+      description: Get a list of work items that are mathing the given filter criteria
       parameters:
         - name: prompt
           in: query
@@ -21,7 +21,7 @@ paths:
           required: true
       responses:
         '200':
-          description: A list of bugs
+          description: A list of work items
           content:
             application/json:
               schema:
@@ -30,17 +30,17 @@ paths:
                   properties:
                     id:
                       type: string
-                      description: The unique identifier of the bug
+                      description: The unique identifier of the work item
                     title:
                       type: string
-                      description: The title of the bug
+                      description: The title of the work item
                     assignedTo:
                       type: string
-                      description: The user who is responsible for the bug
+                      description: The user who is responsible for the work item
                     url:
                       type: string
                       format: uri
-                      description: The html url of the bug
+                      description: The html url of the work item
                     avatar:
                       type: string
-                      description: The avatar of the user who is responsible for the bug
+                      description: The avatar of the user who is responsible for the work item

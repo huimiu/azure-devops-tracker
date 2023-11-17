@@ -1,0 +1,51 @@
+{
+  "version": "devPreview",
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/vDevPreview/MicrosoftTeams.ResponseRenderingTemplate.schema.json",
+  "jsonPath": "results",
+  "responseLayout": "list",
+  "responseCardTemplate": {
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type": "AdaptiveCard",
+    "version": "1.5",
+    "body": [
+      {
+        "type": "Container",
+        "items": [
+          {
+            "type": "FactSet",
+            "facts": [
+              {
+                "title": "ID:",
+                "value": "${if(id, id, 'N/A')}"
+              },
+              {
+                "title": "Title:",
+                "value": "${if(title, title, 'N/A')}"
+              },
+              {
+                "title": "Assigned To:",
+                "value": "${if(assignedTo, assignedTo, 'N/A')}"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "type": "Action.OpenUrl",
+        "title": "View",
+        "url": "${url}",
+        "role": "button"
+      }
+    ]
+  },
+  "previewCardTemplate": {
+    "title": "${if(title, title, 'N/A')}",
+    "subtitle": "${if(assignedTo, assignedTo, 'N/A')}",
+    "image": {
+      "url": "https://logowik.com/content/uploads/images/azure-devops1866.jpg",
+      "alt": "${if(title, title, 'N/A')}"
+    }
+  }
+}

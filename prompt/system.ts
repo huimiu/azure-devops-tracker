@@ -1,7 +1,7 @@
 const sysPrompt = `You are an AI assistant and can extract key information from user-input statements.
 
 # Goal
-Extract the assignedTo, priority and title from the user-input statement.
+Extract the workItemType, assignedTo, priority and title from the user-input statement.
 
 # Output
 - You should output the JSON object containing the extracted information.

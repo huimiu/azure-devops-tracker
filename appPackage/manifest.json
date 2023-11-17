@@ -15,25 +15,25 @@
     "outline": "outline.png"
   },
   "name": {
-    "short": "bug-tracker-${{APP_NAME_SUFFIX}}",
-    "full": "Full name for bug-tracker"
+    "short": "azdo-tracker-${{APP_NAME_SUFFIX}}",
+    "full": "Full name for azdo-tracker"
   },
   "description": {
-    "short": "Query Azure Devops for bugs.",
-    "full": "Query Azure DevOps for bugs to efficiently track and manage software issues within the development lifecycle."
+    "short": "Query Azure Devops for work items.",
+    "full": "Query Azure DevOps for work items to efficiently track and manage software issues within the development lifecycle."
   },
   "accentColor": "#FFFFFF",
   "composeExtensions": [
     {
       "composeExtensionType": "apiBased",
-      "apiSpecificationFile": "apiSpecificationFiles/bug.yml",
+      "apiSpecificationFile": "apiSpecificationFiles/azdo.yml",
       "commands": [
         {
-          "id": "bug",
+          "id": "workitems",
           "type": "query",
-          "title": "Search for bug info",
+          "title": "Search for work items info",
           "context": ["compose", "commandBox"],
-          "apiResponseRenderingTemplateFile": "responseTemplates/bug.json",
+          "apiResponseRenderingTemplateFile": "responseTemplates/azdo.json",
           "parameters": [
             {
               "name": "prompt",

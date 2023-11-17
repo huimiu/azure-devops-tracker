@@ -2,6 +2,7 @@
   {
     "request": "Query bugs assigned to me with titles containing 'API ME' and having a priority of P1.",
     "response": {
+      "workItemType": "Bug",
       "assignedTo": "me",
       "priority": "1",
       "title": "API ME"
@@ -10,8 +11,17 @@
   {
     "request": "Query bugs assigned to Tom with a priority level of P2.",
     "response": {
+      "workItemType": "Bug",
       "assignedTo": "Tom",
       "priority": "2"
+    }
+  },
+  {
+    "request": "List tasks assigned to me with title containing 'Investigate'",
+    "response": {
+      "workItemType": "Task",
+      "assignedTo": "me",
+      "title": "Investigate"
     }
   }
 ]
