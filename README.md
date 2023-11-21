@@ -19,8 +19,9 @@ This app template allows Teams to interact directly with third-party data, apps,
 
 1. First, select the Teams Toolkit icon on the left in the VS Code toolbar.
 2. In the Account section, sign in with your [Microsoft 365 account](https://docs.microsoft.com/microsoftteams/platform/toolkit/accounts) if you haven't already.
-3. Select `Debug in Teams (Edge)` or `Debug in Teams (Chrome)` from the launch configuration dropdown.
-4. When Teams launches in the browser, you can navigate to a chat message and [trigger your search commands from compose message area](https://learn.microsoft.com/microsoftteams/platform/messaging-extensions/what-are-messaging-extensions?tabs=dotnet#search-commands).
+3. Provide the Azure DevOps access token in the `env.local.user` file. You can [create a new token](https://docs.microsoft.com/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with `Work Items (Read)` scope.
+4. Select `Debug in Teams (Edge)` or `Debug in Teams (Chrome)` from the launch configuration dropdown.
+5. When Teams launches in the browser, you can navigate to a chat message and [trigger your search commands from compose message area](https://learn.microsoft.com/microsoftteams/platform/messaging-extensions/what-are-messaging-extensions?tabs=dotnet#search-commands).
 
 ## What's included in the template
 
@@ -30,17 +31,16 @@ This app template allows Teams to interact directly with third-party data, apps,
 | `appPackage` | Templates for the Teams application manifest, the API specification and response template for API responses |
 | `env`        | Environment files                                                                                           |
 | `infra`      | Templates for provisioning Azure resources                                                                  |
-| `repair`     | The source code for the repair API                                                                          |
+| `workitems`  | The source code for the Azure work items API                                                                |
 
 The following files can be customized and demonstrate an example implementation to get you started.
 
-| File                                          | Contents                                                                     |
-| --------------------------------------------- | ---------------------------------------------------------------------------- |
-| `repair/function.json`                        | A configuration file that defines the function’s trigger and other settings. |
-| `repair/index.ts`                             | The main file of a function in Azure Functions.                              |
-| `appPackage/apiSpecificationFiles/repair.yml` | A file that describes the structure and behavior of the repair API.          |
-| `appPackage/responseTemplates/repair.json`    | A generated Adaptive Card that used to render API response.                  |
-| `repairsData.json`                            | The data source for the repair API                                           |
+| File                                        | Contents                                                                      |
+| ------------------------------------------- | ----------------------------------------------------------------------------- |
+| `workitems/function.json`                   | A configuration file that defines the function’s trigger and other settings.  |
+| `workitems/index.ts`                        | The main file of a function in Azure Functions.                               |
+| `appPackage/apiSpecificationFiles/azdo.yml` | A file that describes the structure and behavior of the Azure work items API. |
+| `appPackage/responseTemplates/azdo.json`    | A generated Adaptive Card that used to render API response.                   |
 
 The following are Teams Toolkit specific project files. You can [visit a complete guide on Github](https://github.com/OfficeDev/TeamsFx/wiki/Teams-Toolkit-Visual-Studio-Code-v5-Guide#overview) to understand how Teams Toolkit works.
 
