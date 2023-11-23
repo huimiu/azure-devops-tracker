@@ -1,17 +1,10 @@
-# Overview of Custom Search Results app template
+# Overview of the Intelligent App Integrated with AzDO
 
-## Build a message extension from a new API with Azure Functions
-
-This app template allows Teams to interact directly with third-party data, apps, and services, enhancing its capabilities and broadening its range of capabilities. It allows Teams to:
-
-- Retrieve real-time information, for example, latest news coverage on a product launch.
-- Retrieve knowledge-based information, for example, my team’s design files in Figma.
-
-## Get started with the template
+## Get started with the app
 
 > **Prerequisites**
 >
-> To run this app template in your local dev machine, you will need:
+> To run this app in your local dev machine, you will need:
 >
 > - [Node.js](https://nodejs.org/), supported versions: 16, 18
 > - A [Microsoft 365 account for development](https://docs.microsoft.com/microsoftteams/platform/toolkit/accounts)
@@ -23,7 +16,7 @@ This app template allows Teams to interact directly with third-party data, apps,
 4. Select `Debug in Teams (Edge)` or `Debug in Teams (Chrome)` from the launch configuration dropdown.
 5. When Teams launches in the browser, you can navigate to a chat message and [trigger your search commands from compose message area](https://learn.microsoft.com/microsoftteams/platform/messaging-extensions/what-are-messaging-extensions?tabs=dotnet#search-commands).
 
-## What's included in the template
+## What's included in the app
 
 | Folder       | Contents                                                                                                    |
 | ------------ | ----------------------------------------------------------------------------------------------------------- |
